@@ -42,6 +42,15 @@ This command updates the package database and installs Docker Community Edition.
 sudo docker --version
 ```
 
+## 💿 Pulling docker images:
+
+```bash
+docker pull mysql:8.0.41
+docker pull zabbix/zabbix-server-mysql
+docker pull zabbix/zabbix-web-nginx-mysql
+docker pull zabbix/zabbix-java-gateway
+```
+
 ## 📦 Deploying Zabbix with Docker
 Instead of using `docker-compose`, we will manually start the containers using `docker run` commands.
 
@@ -107,3 +116,38 @@ docker logs mysql-server
 docker logs zabbix-server-mysql
 docker logs zabbix-web-nginx-mysql
 ```
+
+## 🚀 Accesing Zabbix Web Interface:
+Once the containers are running, access the Zabbix web interface at `http://<SERVER_IP>:8080/`
+
+If you are testing on the same machine where Docker runs, open in the browser: `http://localhost:8080/`
+
+### 🌐 Configuring SNMP on Fortinet:
+To monitor the Fortinet router using SNMP:
+
+1. **Enable SNMP** on the Fortinet router:
+    - Access the router's admin interface.
+    - Go to *System* > *SNMP* and enable SNMP v1, v2 or v3 if you want more security.
+    - Configure the **SNMP community** (e.g., `public`).
+    - Add the IP of the server running Zabbix as an allowed host.
+    - Save the changes.
+
+2. **Add the router to Zabbix:**
+    - Log in to the Zabbix web interface.
+    - Go to *Data Collection* > *Hosts* and click *Create Host*.
+    - Enter the router's name and IP address.
+    - In *Templates*, add the `Template Net Network Generic Device SNMP` or select an official template for your Fortinet router (recommended option).
+    - In *Interfaces*, select **SNMP** and use the community configured on Fortinet.
+    - Save and verify that Zabbix starts collecting data.
+
+
+## 📊 Verification and Monitoring:
+- Go to *Monitoring* > *Hosts* and check the router's data.
+- Configure graphs and triggers as needed.
+
+
+## 📌 Conclusion
+This method allows monitoring a Fortinet router with **Zabbix in Docker** using **SNMP**. It is a flexible and scalable solution for real-time network monitoring.
+
+If you have any questions or suggestions, feel free to open an issue in this repository! 🚀
+
